@@ -1,2 +1,2 @@
 # Janitor
-Bash script to automate deleting files older than X days in a given directory
+Bash script to automate deleting old files in a specified directory
