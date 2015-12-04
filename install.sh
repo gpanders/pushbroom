@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+# Set defaults
 TARGET_DIR=$HOME/Downloads
 NUM_DAYS=30
 TRASH_DIR=$HOME/.Trash
 
-while getopts "d:t:n:" opt; do
+function print_usage() {
+    echo "Usage: ./install.sh [-x] [-d <target directory>] [-t <trash directory>] [-n <integer>]"
+}
+
+while getopts "xd:t:n:" opt; do
     case $opt in
         d)
             TARGET_DIR="$OPTARG"
@@ -12,18 +17,26 @@ while getopts "d:t:n:" opt; do
         t)
             TRASH_DIR="$OPTARG"
             ;;
+        x)
+            TRASH_DIR=
+            ;;
         n)
             NUM_DAYS="$OPTARG"
             ;;
         \?)
-            echo "Invalid option: -$OPTARG" >&2
+            print_usage
+            exit 1
             ;;
     esac
 done
 
 echo "Target directory is $TARGET_DIR"
 echo "Deleting files older than $NUM_DAYS"
-echo "Trash direcotry is $TRASH_DIR"
+if [ -z "$TRASH_DIR" ];  then
+    echo "Hard deleting files - not using a Trash directory"
+else
+    echo "Trash direcotry is $TRASH_DIR"
+fi
 
 function create_crontab() {
     echo " "
