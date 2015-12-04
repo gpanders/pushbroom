@@ -9,9 +9,6 @@ export DAYS_TO_KEEP=$2
 # Trash folder to move deleted files to (default: ~/.Trash)
 export TRASH_DIR=$3
 
-# Location to store log files, relative to the Janitor directory (default: logs)
-export LOG_DIR=logs
-
 if [ -z "$TARGET_DIR" -o -z "$DAYS_TO_KEEP" ]; then
     echo "Minimum 2 arguments required"
     exit 1
@@ -27,7 +24,7 @@ function clean() {
     fi
     rm -rf "$1"
 
-    LOG="$LOG_DIR"/janitor_$(date +"%Y%m%d").log
+    LOG="logs/janitor_$(date +"%Y%m%d").log"
 
     if [ ! -e $LOG ]; then
         echo "Files removed from $TARGET_DIR on $(date +%m-%d-%Y):" > "$LOG"
