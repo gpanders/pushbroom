@@ -1,2 +1,0 @@
-# Crontab for Janitor
-0  */6  *  *  * $HOME/.janitor.sh
