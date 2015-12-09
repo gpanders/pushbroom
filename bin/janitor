@@ -26,7 +26,7 @@ function clean() {
 
     LOG="logs/janitor_$(date +"%Y%m%d").log"
 
-    if [ ! -e $LOG ]; then
+    if [ ! -e "$LOG" ]; then
         echo "Files removed from $TARGET_DIR on $(date +%m-%d-%Y):" > "$LOG"
     fi
     echo "${1##*/}" >> "$LOG"

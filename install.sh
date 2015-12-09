@@ -45,31 +45,23 @@ function create_crontab() {
 }
 
 function check_crontab() {
-    if [[ $CURRENT_CRONTAB == *"# Begin Janitor job"* && \
-          $CURRENT_CRONTAB == *"# End Janitor job"* ]]; then
+    if [[ $1 == *"# Begin Janitor job"* && \
+          $1 == *"# End Janitor job"* ]]; then
         return 1
     else
         return 0
     fi
 }
 
-
 # Create crontab
-CRONTAB=$(create_crontab "$TARGET_DIR" "$NUM_DAYS" "$TRASH_DIR")
-CURRENT_CRONTAB="$(crontab -l 2>/dev/null)"
-if [ $? -ne 0 ]; then
-    # No existing crontab
+if check_crontab "$(crontab -l 2>/dev/null)"; then
+    # Crontab exists but does not already contain ours
     echo "Creating crontab entry."
-    echo "$CRONTAB"| crontab -
+    entry=$(create_crontab "$TARGET_DIR" "$NUM_DAYS" "$TRASH_DIR")
+    (crontab -l 2>/dev/null; [[ $? -eq 0 ]] && echo " " ; echo "$entry") | crontab -
 else
-    if check_crontab; then
-        # Crontab exists but does not already contain ours
-        echo "Creating crontab entry."
-        (crontab -l ; echo " " ; echo "$CRONTAB") | crontab -
-    else
-        echo "Janitor cronjob already exists. Remove the current job (using crontab -e) and re-run this installation script."
-        exit 1
-    fi
+    echo "Janitor cronjob already exists. Remove the current job (using crontab -e) and re-run this installation script."
+    exit 1
 fi
 
 mkdir -p logs
