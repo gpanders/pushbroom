@@ -5,7 +5,7 @@ TARGET_DIR=$HOME/Downloads
 NUM_DAYS=30
 TRASH_DIR=$HOME/.Trash
 
-function print_usage() {
+function usage() {
     echo "Usage: ./install.sh [-x] [-d <target directory>] [-t <trash directory>] [-n <integer>]"
 }
 
@@ -24,7 +24,7 @@ while getopts "xd:t:n:" opt; do
             NUM_DAYS="$OPTARG"
             ;;
         \?)
-            print_usage
+            usage
             exit 1
             ;;
     esac
@@ -40,7 +40,7 @@ fi
 
 function create_crontab() {
     echo "# Begin Janitor job"
-    echo "0  */6  *  *  * $(pwd)/bin/janitor $1 $2 $3"
+    echo "0  */6  *  *  * $(pwd)/bin/janitor \"$1\" \"$2\" \"$3\""
     echo "# End Janitor job"
 }
 
