@@ -31,7 +31,7 @@ while getopts "xd:t:n:" opt; do
 done
 
 echo "Target directory is $TARGET_DIR"
-echo "Deleting files older than $NUM_DAYS"
+echo "Deleting files older than $NUM_DAYS days"
 if [ -z "$TRASH_DIR" ];  then
     echo "Hard deleting files - not using a Trash directory"
 else
