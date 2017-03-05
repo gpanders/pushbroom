@@ -17,16 +17,15 @@ if [ -z "$TARGET_DIR" -o -z "$DAYS_TO_KEEP" ]; then
     exit 1
 fi
 
-
-function clean() {
+function sweep() {
     if [ $# -eq 0 ]; then
         exit 1
     fi
 
     if [ ! -z "$TRASH_DIR" ]; then
-        rsync -a "$1" "$TRASH_DIR"
+        rsync -a "$1" "$TRASH_DIR" 2>/dev/null
     fi
-    rm -rf "$1"
+    rm -rf "$1" 2>/dev/null
 
     LOG="$JANITOR_DIR/logs/janitor_$(date +"%Y%m%d").log"
 
@@ -36,6 +35,6 @@ function clean() {
     echo "${1##*/}" >> "$LOG"
 }
 
-export -f clean
+export -f sweep
 
-find "$TARGET_DIR" -mtime +$DAYS_TO_KEEP -depth 1 -exec bash -c 'clean "$0"' {} \;
+find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -mtime +$DAYS_TO_KEEP -exec bash -c 'sweep "$0"' {} \; 2>/dev/null
