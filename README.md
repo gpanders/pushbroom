@@ -30,7 +30,7 @@ Pushbroom will run once every hour.
 
 Install using pip:
 
-    pip install pushbroom
+    pip install --user pushbroom
 
 ### From source
 
@@ -42,6 +42,14 @@ locations:
     cd pushbroom-vX.Y.Z
     cp -r bin /usr/local/
     cp -n pushbroom.conf ~/.config/pushbroom/config
+
+## Usage
+
+Pushbroom can be run from the command line using:
+
+    pushbroom
+
+Use `pushbroom --help` to see a list of command line options.
 
 ## Configuration
 
@@ -97,6 +105,26 @@ Number of days to keep files in `Path` before they are removed.
 **Ignore**
 
 Glob expression pattern of files or directories to ignore.
+
+## Automating
+
+If installed via Homebrew then Pushbroom can be set to run once every hour using
+
+    brew services start gpanders/tap/pushbroom
+
+Another option is to install a crontab entry
+
+    0 */1 * * * /usr/local/bin/pushbroom
+
+If you are using a Linux distribution that uses systemd, you can copy the
+[systemd service
+file](https://github.com/gpanders/pushbroom/blob/master/contrib/systemd/pushbroom.service)
+to `~/.local/share/systemd/` and enable the service with
+
+    systemctl --user enable --now pushbroom
+
+Note that you may need to change the path to the `pushbroom` script in the
+service file depending on your method of installation.
 
 ## Similar Work
 

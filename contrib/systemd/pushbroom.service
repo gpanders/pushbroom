@@ -1,0 +1,8 @@
+[Unit]
+Description=Pushbroom
+
+[Service]
+User=%I
+Restart=always
+RestartSec=3600s
+ExecStart=/usr/local/bin/pushbroom
