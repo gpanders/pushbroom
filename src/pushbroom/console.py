@@ -14,6 +14,12 @@ def run():
     parser.add_argument("-c", "--config", type=str, help="path to config file")
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose output")
     parser.add_argument(
+        "-V",
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version=pushbroom.__version__),
+    )
+    parser.add_argument(
         "-n",
         "--dry-run",
         action="store_true",
