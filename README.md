@@ -1,35 +1,38 @@
-# Janitor
-Bash script to automate deleting old files in a specified directory
+# Pushbroom
+Keep select filesystem paths free of clutter
 
 ## Installation
-    git clone git@github.com:gpanders/Janitor.git
-    cd Janitor
-    ./install.sh
 
-By default, Janitor will monitor `$HOME/Downloads` and move any file older than
-30 days to your Trash folder (`$HOME/.Trash`). These settings can be changed using
-the installation script (see below).
+Directly from source:
 
-## Options
+    git clone https://github.com/gpanders/pushbroom
+    pip install ./pushbroom
 
-**Target directory**
+Or from PyPI:
 
-  Specify which directory to monitor
+    pip install pushbroom
 
-    -d <directory>
+Pushbroom comes with an example configuration file `pushbroom.conf`. You can
+copy this to either `$XDG_CONFIG_HOME/pushbroom/config` or `$HOME/.pushbroomrc` and
+modify it to your needs.
 
-**Trash directory**
+## Configuration
 
-  Specify where to move files after deletion (if `-x` option is not set)
+The following configuration items are recognized in `pushbroom.conf`:
 
-    -t <directory>
+**Path**
 
-**Number of days to keep files**
+Specify which directory to monitor
 
-    -n <integer>
+**Trash**
 
-**Hard delete files**
+Specify where to move files after deletion. If this option is not provided,
+files will simply be deleted.
 
-  Flag indicating to not move files to another directory, but rather permanently delete them
+**NumDays**
 
-    -x
+Number of days to keep files in `Path` before they are removed.
+
+**Ignore**
+
+Regular expression pattern of files or directories to ignore.

@@ -17,7 +17,7 @@ def sweep(path, num_days, ignored, trash=None, dry_run=False):
 
     """
     now = time.time()
-    logging.info("Starting janitor")
+    logging.info("Starting pushbroom")
     num_seconds = num_days * SECONDS_PER_DAY
     thresh = now - num_seconds
     for root, dirs, files in os.walk(path):
@@ -26,16 +26,15 @@ def sweep(path, num_days, ignored, trash=None, dry_run=False):
         files = [f for f in files if not re.match(ignored, f)]
         for file in files:
             fpath = os.path.join(root, file)
-            if os.stat(fpath).st_mtime < thresh:
-                if trash:
-                    if dry_run:
-                        print("Moving {} to {}".format(file, trash))
+            try:
+                if os.stat(fpath).st_mtime < thresh:
+                    if trash:
+                        logging.info("Moving %s to %s", fpath, trash)
+                        if not dry_run:
+                            os.rename(fpath, os.path.join(trash, file))
                     else:
-                        logging.info("Moving %s to %s", file, trash)
-                        os.rename(fpath, os.path.join(trash, file))
-                else:
-                    if dry_run:
-                        print("Deleting {}".format(file))
-                    else:
-                        logging.info("Deleting %s", file)
-                        os.remove(fpath)
+                        logging.info("Deleting %s", fpath)
+                        if not dry_run:
+                            os.remove(fpath)
+            except FileNotFoundError:
+                pass

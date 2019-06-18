@@ -1,18 +1,18 @@
 [tool.poetry]
-name = "janitor"
+name = "pushbroom"
 version = "0.1.0"
 description = "Clean up your filesystem"
 authors = ["Greg Anders <greg@gpanders.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/gpanders/janitor"
-include = ["janitor.conf"]
+repository = "https://github.com/gpanders/pushbroom"
+include = ["pushbroom.conf"]
 packages = [
-    { include = "janitor", from = "src" },
+    { include = "pushbroom", from = "src" },
 ]
 
 [tool.poetry.scripts]
-janitor = "janitor.console:run"
+pushbroom = "pushbroom.console:run"
 
 [tool.poetry.dependencies]
 python = "^3.4"
