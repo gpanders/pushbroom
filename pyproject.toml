@@ -6,10 +6,7 @@ authors = ["Greg Anders <greg@gpanders.com>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/gpanders/pushbroom"
-include = ["pushbroom.conf"]
-packages = [
-    { include = "pushbroom", from = "src" },
-]
+include = ["README.md", "CHANGELOG.md", "pushbroom.conf"]
 
 [tool.poetry.scripts]
 pushbroom = "pushbroom.console:run"

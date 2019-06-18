@@ -11,7 +11,7 @@ def sweep(path, num_days, ignored, trash=None, dry_run=False):
 
     :path: Path to remove files from
     :num_days: Remove files older than this many days
-    :ignored: Regex pattern of paths to ignore
+    :ignored: Glob pattern of paths to ignore
     :trash: If set, move files to this directory instead of deleting them
     :dry_run: Only show what would happen without actually doing anything
 
