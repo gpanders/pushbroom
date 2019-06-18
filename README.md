@@ -3,10 +3,11 @@ Keep select filesystem paths free of clutter
 
 ## Installation
 
-Directly from source:
+Directly from source (requires [poetry](https://github.com/sdispater/poetry)):
 
     git clone https://github.com/gpanders/pushbroom
-    pip install ./pushbroom
+    cd pushbroom
+    poetry install
 
 Or from PyPI:
 
