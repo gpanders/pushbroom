@@ -23,7 +23,6 @@ def run():
     parser.add_argument(
         "-c",
         "--config",
-        default=os.path.expanduser("~/.config/janitor/config"),
         type=str,
         help="path to config file",
     )
@@ -36,12 +35,19 @@ def run():
 
     args = parser.parse_args()
 
+    if not args.config:
+        # Look under XDG_CONFIG_HOME first, then look for ~/.janitorrc
+        xdg_config_home = os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
+        args.config = os.path.join(xdg_config_home, "janitor", "config")
+        if not os.path.exists(args.config):
+            args.config = os.path.expanduser("~/.janitorrc")
+
     config = configparser.ConfigParser()
     try:
         with open(args.config, "r") as f:
             config.read_file(f)
     except FileNotFoundError:
-        print("No configuration file found.")
+        print("Configuration file {} not found".format(args.config))
         sys.exit(1)
 
     for path in config.sections():
