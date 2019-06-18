@@ -3,7 +3,11 @@ Keep select filesystem paths free of clutter
 
 ## Installation
 
-Directly from source (requires [poetry](https://github.com/sdispater/poetry)):
+Install via Homebrew:
+
+    brew install gpanders/tap/pushbroom
+
+Or directly from source (requires [poetry](https://github.com/sdispater/poetry)):
 
     git clone https://github.com/gpanders/pushbroom
     cd pushbroom
