@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "janitor"
+version = "0.1.0"
+description = "Clean up your filesystem"
+authors = ["Greg Anders <greg@gpanders.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/gpanders/janitor"
+include = ["janitor.conf"]
+packages = [
+    { include = "janitor", from = "src" },
+]
+
+[tool.poetry.scripts]
+janitor = "janitor.console:run"
+
+[tool.poetry.dependencies]
+python = "^3.4"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

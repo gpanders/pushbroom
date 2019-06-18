@@ -1,4 +1,0 @@
-global-exclude .gitignore .git
-include setup.py
-include README.md
-include janitor.conf
