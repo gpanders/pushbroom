@@ -6,7 +6,7 @@ import time
 SECONDS_PER_DAY = 24 * 60 * 60
 
 
-def sweep(path, num_days, ignored, trash=None, dry_run=False):
+def sweep(name, path, num_days, ignored, trash=None, dry_run=False):
     """Remove old files from a directory
 
     :path: Path to remove files from
@@ -16,8 +16,8 @@ def sweep(path, num_days, ignored, trash=None, dry_run=False):
     :dry_run: Only show what would happen without actually doing anything
 
     """
+    logging.info("Sweeping %s", name)
     now = time.time()
-    logging.info("Starting pushbroom")
     num_seconds = num_days * SECONDS_PER_DAY
     thresh = now - num_seconds
     for root, dirs, files in os.walk(path):
