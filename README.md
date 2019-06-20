@@ -85,26 +85,51 @@ files or directories that match the given glob:
     [Downloads]
     Path = ~/Downloads
     NumDays = 30
-    Ignore = folder_to_keep/**/*
+    Ignore = folder_to_keep
+
+Similarly, you can specify `Match` to have Pushbroom only remove files that
+match one of the given patterns:
+
+    [Vim Backup Directory]
+    Path = ~/.cache/vim/backup
+    NumDays = 90
+    Match = *~
+
+Both `Ignore` and `Match` can be a list of patterns separated by commas.
+
+    [Home Directory]
+    Path = ~
+    NumDays = 365
+    Match = .*
+    Ignore = .local, .config, .cache, .vim
 
 The following configuration items are recognized in `pushbroom.conf`:
 
-**Path**
+### Path
+**Required**
 
-Specify which directory to monitor
+Specify which directory to monitor.
 
-**Trash**
+### Trash
 
-Specify where to move files after deletion. If this option is not provided,
-files will simply be deleted.
+Specify where to move files after deletion. If omitted, files will simply be
+deleted.
 
-**NumDays**
+### NumDays
+**Required**
 
 Number of days to keep files in `Path` before they are removed.
 
-**Ignore**
+### Ignore
+**Default**: None
 
-Glob expression pattern of files or directories to ignore.
+List of glob expression patterns of files or directories to ignore.
+
+### Match
+**Default**: `*`
+
+List of glob expression patterns of files or directories to remove. If omitted,
+everything is removed.
 
 ## Automating
 

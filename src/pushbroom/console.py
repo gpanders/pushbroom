@@ -83,10 +83,12 @@ def run():
             trash = config.get(section, "trash", fallback=None)
             ignore = config.get(section, "ignore", fallback="").split(",")
             ignored = r"|".join([fnmatch.translate(x) for x in ignore])
+            match = config.get(section, "match", fallback="*").split(",")
+            matched = r"|".join([fnmatch.translate(x) for x in match])
 
             if trash:
                 trash = os.path.abspath(os.path.expanduser(trash))
                 if not os.path.isdir(trash):
                     logging.error("No such directory %s", trash)
 
-            pushbroom.sweep(section, fullpath, num_days, ignored, trash, args.dry_run)
+            pushbroom.sweep(section, fullpath, num_days, ignored, matched, trash, args.dry_run)

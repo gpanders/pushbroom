@@ -6,7 +6,7 @@ import time
 SECONDS_PER_DAY = 24 * 60 * 60
 
 
-def sweep(name, path, num_days, ignored, trash=None, dry_run=False):
+def sweep(name, path, num_days, ignored, match=None, trash=None, dry_run=False):
     """Remove old files from a directory
 
     :path: Path to remove files from
@@ -21,9 +21,9 @@ def sweep(name, path, num_days, ignored, trash=None, dry_run=False):
     num_seconds = num_days * SECONDS_PER_DAY
     thresh = now - num_seconds
     for root, dirs, files in os.walk(path):
-        dirs[:] = [d for d in dirs if not re.match(ignored, d)]
+        dirs[:] = [d for d in dirs if re.match(match, d) and not re.match(ignored, d)]
 
-        files = [f for f in files if not re.match(ignored, f)]
+        files = [f for f in files if re.match(match, f) and not re.match(ignored, f)]
         for file in files:
             fpath = os.path.join(root, file)
             try:
