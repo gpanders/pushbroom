@@ -3,9 +3,10 @@ import configparser
 import fnmatch
 import logging
 import os
+import re
 import sys
 
-import pushbroom
+from pushbroom import sweep, __version__
 
 
 def run():
@@ -17,7 +18,7 @@ def run():
         "-V",
         "--version",
         action="version",
-        version="%(prog)s {version}".format(version=pushbroom.__version__),
+        version="%(prog)s {version}".format(version=__version__),
     )
     parser.add_argument(
         "-n",
@@ -82,13 +83,14 @@ def run():
             num_days = config.getint(section, "numdays")
             trash = config.get(section, "trash", fallback=None)
             ignore = config.get(section, "ignore", fallback="").split(",")
-            ignored = r"|".join([fnmatch.translate(x) for x in ignore])
+            ignore_re = re.compile("|".join([fnmatch.translate(x) for x in ignore]))
             match = config.get(section, "match", fallback="*").split(",")
-            matched = r"|".join([fnmatch.translate(x) for x in match])
+            match_re = re.compile("|".join([fnmatch.translate(x) for x in match]))
+            dry_run = args.dry_run
 
             if trash:
                 trash = os.path.abspath(os.path.expanduser(trash))
                 if not os.path.isdir(trash):
                     logging.error("No such directory %s", trash)
 
-            pushbroom.sweep(section, fullpath, num_days, ignored, matched, trash, args.dry_run)
+            sweep(section, fullpath, num_days, ignore_re, match_re, trash, dry_run)
