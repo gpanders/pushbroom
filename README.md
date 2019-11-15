@@ -21,16 +21,20 @@ Copy and modify the included `pushbroom.conf` file to
 `~/.config/pushbroom/config` and use `brew services start
 gpanders/tap/pushbroom` to start the automatic launchd daemon:
 
-    cp -n /usr/local/etc/pushbroom.conf ~/.config/pushbroom/config
+    cp /usr/local/etc/pushbroom.conf ~/.config/pushbroom/config
     brew services start gpanders/tap/pushbroom
 
 Pushbroom will run once every hour.
 
-### PyPI
+### pipx
 
-Install using pip:
+Install using [pipx](https://pipxproject.github.io/pipx/):
 
-    pip install --user pushbroom
+    pipx install pushbroom
+
+Copy the [example configuration
+file](https://raw.githubusercontent.com/gpanders/pushbroom/master/pushbroom.conf)
+to `~/.config/pushbroom/config` or create your own from scratch.
 
 ### From source
 
@@ -40,8 +44,8 @@ locations:
 
     tar xzf pushbroom-vX.Y.Z.tar.gz
     cd pushbroom-vX.Y.Z
-    cp -r bin /usr/local/
-    cp -n pushbroom.conf ~/.config/pushbroom/config
+    cp bin/pushbroom /usr/local/bin/pushbroom
+    cp pushbroom.conf ~/.config/pushbroom/config
 
 ## Usage
 
@@ -103,12 +107,16 @@ Both `Ignore` and `Match` can be a list of patterns separated by commas.
     Match = .*
     Ignore = .local, .config, .cache, .vim
 
+Note that `.*` **is not** a regular expression for "match everything", but
+rather a _glob expression_ for "all files that start with a period".
+
 The following configuration items are recognized in `pushbroom.conf`:
 
 ### Path
 **Required**
 
-Specify which directory to monitor.
+Absolute path to a directory to monitor. Tildes (`~`) are expanded to the
+user's home directory.
 
 ### Trash
 
