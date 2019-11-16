@@ -2,18 +2,23 @@ import logging
 import os
 import re
 import time
+from pathlib import Path
 
 SECONDS_PER_DAY = 24 * 60 * 60
 
 
 def delete(path, shred):
-    if shred:
-        with open(path, "ba+") as f:
-            length = f.tell()
-            f.seek(0)
-            f.write(os.urandom(length))
+    """Delete the file at the given path.
 
-    os.remove(path)
+    If ``shred`` is True, first write over the file with random data before deleting.
+    """
+    if shred:
+        with open(path, "ba+") as fil:
+            length = fil.tell()
+            fil.seek(0)
+            fil.write(os.urandom(length))
+
+    Path(path).unlink()
 
 
 def sweep(name, path, num_days, ignore, match, trash, dry_run, shred):
@@ -37,17 +42,17 @@ def sweep(name, path, num_days, ignore, match, trash, dry_run, shred):
         dirs[:] = [d for d in dirs if re.match(match, d) and not re.match(ignore, d)]
         files = [f for f in files if re.match(match, f) and not re.match(ignore, f)]
         for file in files:
-            fpath = os.path.join(root, file)
-            if not os.path.exists(fpath):
+            fpath = Path(root).joinpath(file)
+            if not fpath.exists():
                 continue
 
-            if os.stat(fpath).st_mtime >= thresh:
+            if fpath.stat().st_mtime >= thresh:
                 continue
 
             if trash:
                 logging.info("Moving %s to %s", fpath, trash)
                 if not dry_run:
-                    os.rename(fpath, os.path.join(trash, file))
+                    fpath.rename(Path(trash).joinpath(fpath.name))
             else:
                 if shred:
                     logging.info("Securely deleting %s", fpath)
