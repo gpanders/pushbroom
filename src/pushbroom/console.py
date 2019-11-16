@@ -36,7 +36,7 @@ def pushbroom(config, dry_run=False):
             ignore_re = re.compile("|".join([fnmatch.translate(x) for x in ignore]))
             match = config.get(section, "match", fallback="*").split(",")
             match_re = re.compile("|".join([fnmatch.translate(x) for x in match]))
-            shred = config.get(section, "shred", fallback=False)
+            shred = config.getboolean(section, "shred", fallback=False)
 
             if trash:
                 if shred:
