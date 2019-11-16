@@ -8,15 +8,15 @@ import sys
 
 from pushbroom import sweep, __version__
 
-
 def run():
-    """Run pushbroom"""
     args = parse_args()
-
     setup_logging(args)
+    config = read_config(args.config)
+    pushbroom(config, args.dry_run)
 
-    config = read_config(args)
 
+def pushbroom(config, dry_run=False):
+    """Run pushbroom"""
     logging.info("Starting pushbroom")
     for section in config.sections():
         path = config.get(section, "path")
@@ -30,14 +30,20 @@ def run():
             ignore_re = re.compile("|".join([fnmatch.translate(x) for x in ignore]))
             match = config.get(section, "match", fallback="*").split(",")
             match_re = re.compile("|".join([fnmatch.translate(x) for x in match]))
-            dry_run = args.dry_run
+            shred = config.get(section, "shred", fallback=False)
 
             if trash:
+                if shred:
+                    logging.warning("Ignoring 'Shred' option while 'Trash' is set")
+                    shred = False
+
                 trash = os.path.abspath(os.path.expanduser(trash))
                 if not os.path.isdir(trash):
                     logging.error("No such directory %s", trash)
 
-            sweep(section, fullpath, num_days, ignore_re, match_re, trash, dry_run)
+            sweep(
+                section, fullpath, num_days, ignore_re, match_re, trash, dry_run, shred
+            )
 
 
 def parse_args():
@@ -89,24 +95,24 @@ def setup_logging(args):
     logger.addHandler(ch)
 
 
-def read_config(args):
+def read_config(conf_file=None):
     """Find and read configuration file"""
-    if not args.config:
+    if not conf_file:
         # Look under XDG_CONFIG_HOME first, then look for ~/.pushbroomrc
-        args.config = os.path.join(
+        conf_file = os.path.join(
             os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config")),
             "pushbroom",
             "config",
         )
-        if not os.path.exists(args.config):
-            args.config = os.path.expanduser("~/.pushbroomrc")
+        if not os.path.exists(conf_file):
+            conf_file = os.path.expanduser("~/.pushbroomrc")
 
     config = configparser.ConfigParser()
     try:
-        with open(args.config, "r") as f:
+        with open(conf_file, "r") as f:
             config.read_file(f)
     except FileNotFoundError:
-        logging.error("Configuration file %s not found", args.config)
+        logging.error("Configuration file %s not found", conf_file)
         sys.exit(1)
 
     return config

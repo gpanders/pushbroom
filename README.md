@@ -139,6 +139,13 @@ List of glob expression patterns of files or directories to ignore.
 List of glob expression patterns of files or directories to remove. If omitted,
 everything is removed.
 
+### Shred
+**Default**: False
+
+Securely delete files before removing them. Note that this option is mutually
+exclusive with the [`Trash`](#trash) option, with `Trash` taking precedence if
+both options are used.
+
 ## Automating
 
 If installed via Homebrew then Pushbroom can be set to run once every hour using
