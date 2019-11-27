@@ -19,7 +19,7 @@ def get_config(name):
     """
     Read the given configuration file and return the configuration object
     """
-    conf_file = os.path.join(os.path.join(os.path.dirname(__file__), "configs"), name)
+    conf_file = Path(__file__).parent.joinpath("configs").joinpath(name)
     return console.read_config(conf_file)
 
 
