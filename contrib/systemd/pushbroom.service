@@ -1,8 +1,7 @@
 [Unit]
-Description=Pushbroom
+Description=Remove old files
 
 [Service]
+Type=oneshot
 User=%I
-Restart=always
-RestartSec=3600s
 ExecStart=/usr/local/bin/pushbroom
