@@ -46,7 +46,8 @@ def pushbroom(config: configparser.ConfigParser, dry_run: bool = False) -> None:
 
                 trash = Path(trash_dir).expanduser().absolute()
                 if not trash.is_dir():
-                    logging.error("No such directory %s", trash)
+                    logging.warning("Creating directory %s", trash)
+                    trash.mkdir(parents=True)
 
             sweep(
                 section, fullpath, num_days, ignore_re, match_re, trash, dry_run, shred
