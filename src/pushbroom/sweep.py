@@ -3,11 +3,12 @@ import os
 import re
 import time
 from pathlib import Path
+from typing import Optional
 
 SECONDS_PER_DAY = 24 * 60 * 60
 
 
-def delete(path, shred):
+def delete(path: Path, shred: bool) -> None:
     """Delete the file at the given path.
 
     If ``shred`` is True, first write over the file with random data before deleting.
@@ -21,7 +22,16 @@ def delete(path, shred):
     Path(path).unlink()
 
 
-def sweep(name, path, num_days, ignore, match, trash, dry_run, shred):
+def sweep(
+    name: str,
+    path: Path,
+    num_days: int,
+    ignore: re.Pattern,
+    match: re.Pattern,
+    trash: Optional[Path],
+    dry_run: bool,
+    shred: bool,
+) -> None:
     # pylint: disable = too-many-arguments
     """Remove old files from a directory
 

@@ -10,10 +10,10 @@ import re
 import sys
 from pathlib import Path
 
-from pushbroom import sweep, __version__
+from pushbroom import __version__, sweep
 
 
-def run():
+def run() -> None:
     """Main entry point"""
     args = parse_args()
     setup_logging(args)
@@ -21,7 +21,7 @@ def run():
     pushbroom(config, args.dry_run)
 
 
-def pushbroom(config, dry_run=False):
+def pushbroom(config: configparser.ConfigParser, dry_run: bool = False) -> None:
     """Run pushbroom"""
     logging.info("Starting pushbroom")
     for section in config.sections():
@@ -31,19 +31,20 @@ def pushbroom(config, dry_run=False):
             logging.error("No such directory: %s", fullpath)
         else:
             num_days = config.getint(section, "numdays")
-            trash = config.get(section, "trash", fallback=None)
+            trash_dir = config.get(section, "trash", fallback=None)
             ignore = config.get(section, "ignore", fallback="").split(",")
             ignore_re = re.compile("|".join([fnmatch.translate(x) for x in ignore]))
             match = config.get(section, "match", fallback="*").split(",")
             match_re = re.compile("|".join([fnmatch.translate(x) for x in match]))
             shred = config.getboolean(section, "shred", fallback=False)
 
-            if trash:
+            trash = None
+            if trash_dir:
                 if shred:
                     logging.warning("Ignoring 'Shred' option while 'Trash' is set")
                     shred = False
 
-                trash = Path(trash).expanduser().absolute()
+                trash = Path(trash_dir).expanduser().absolute()
                 if not trash.is_dir():
                     logging.error("No such directory %s", trash)
 
@@ -52,7 +53,7 @@ def pushbroom(config, dry_run=False):
             )
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(description="Clean up your filesystem.")
     parser.add_argument("-c", "--config", type=str, help="path to config file")
@@ -73,7 +74,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def setup_logging(args):
+def setup_logging(args: argparse.Namespace) -> None:
     """Set up logging"""
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -102,7 +103,7 @@ def setup_logging(args):
     logger.addHandler(stream_handler)
 
 
-def read_config(conf_file=None):
+def read_config(conf_file: Path = None) -> configparser.ConfigParser:
     """Find and read configuration file"""
     if not conf_file:
         # Look under XDG_CONFIG_HOME first, then look for ~/.pushbroomrc
@@ -111,8 +112,8 @@ def read_config(conf_file=None):
             .joinpath("pushbroom")
             .joinpath("config")
         )
-        if not os.path.exists(conf_file):
-            conf_file = os.path.expanduser("~/.pushbroomrc")
+        if not conf_file.exists():
+            conf_file = Path("~/.pushbroomrc").expanduser()
 
     config = configparser.ConfigParser()
     try:
