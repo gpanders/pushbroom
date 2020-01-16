@@ -30,11 +30,13 @@ def sweep(name: str, path: Path, opts: Dict, dry_run: bool) -> None:
     :path:    Path to remove files from
     :opts:    Dict of options containing the following:
 
-                num_days - Remove files older than this many days
-                ignore   - Regular expression pattern of paths to ignore
-                match    - Regular expression pattern of paths to remove
-                trash    - If set, move files to this directory instead of deleting them
-                shred    - Securely delete file data before removing
+                num_days     - Remove files older than this many days
+                ignore       - Regular expression pattern of paths to ignore
+                match        - Regular expression pattern of paths to remove
+                trash        - If set, move files to this directory instead of deleting
+                               them
+                shred        - Securely delete file data before removing
+                remove_empty - Remove empty subdirectories
 
     :dry_run: Only show what would happen without actually doing anything
 
@@ -44,6 +46,10 @@ def sweep(name: str, path: Path, opts: Dict, dry_run: bool) -> None:
     thresh = time.time() - num_seconds
     match, ignore = opts["match"], opts["ignore"]
     for root, dirs, files in os.walk(path):
+        if opts["remove_empty"] and not dirs and not files:
+            Path(root).rmdir()
+            continue
+
         dirs[:] = [d for d in dirs if re.match(match, d) and not re.match(ignore, d)]
         files = [f for f in files if re.match(match, f) and not re.match(ignore, f)]
         for fil in files:

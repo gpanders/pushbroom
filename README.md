@@ -146,6 +146,11 @@ Securely delete files before removing them. Note that this option is mutually
 exclusive with the [`Trash`](#trash) option, with `Trash` taking precedence if
 both options are used.
 
+### RemoveEmpty
+**Default**: True
+
+Remove empty subdirectories from monitored paths.
+
 ## Automating
 
 If installed via Homebrew then Pushbroom can be set to run once every hour using

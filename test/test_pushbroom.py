@@ -196,3 +196,37 @@ def test_shred_with_trash(trash_dir):
         assert "Hello, world!" in fil.readlines()
 
     path.rmdir()
+
+
+def test_remove_empty_dirs():
+    """
+    Empty directories should be removed
+    """
+    config = get_config("delete.conf")
+    path = get_config_path(config)
+
+    empty = path.joinpath("empty")
+    empty.mkdir(parents=True)
+
+    assert empty.exists()
+    console.pushbroom(config)
+    assert not empty.exists()
+
+    path.rmdir()
+
+
+def test_no_remove_empty_dirs():
+    """
+    Empty directories should not be removed when RemoveEmpty is false
+    """
+    config = get_config("no_remove_empty.conf")
+    path = get_config_path(config)
+
+    empty = path.joinpath("empty")
+    empty.mkdir(parents=True)
+
+    console.pushbroom(config)
+    assert empty.exists()
+
+    empty.rmdir()
+    path.rmdir()

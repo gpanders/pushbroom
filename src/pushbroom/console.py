@@ -116,6 +116,7 @@ def parse_opts(config: configparser.ConfigParser, section: str) -> Dict:
     match = config.get(section, "match", fallback="*").split(",")
     match_re = re.compile("|".join([fnmatch.translate(x) for x in match]))
     shred = config.getboolean(section, "shred", fallback=False)
+    remove_empty = config.getboolean(section, "removeempty", fallback=True)
 
     trash = None
     if trash_dir:
@@ -134,4 +135,5 @@ def parse_opts(config: configparser.ConfigParser, section: str) -> Dict:
         "match": match_re,
         "trash": trash,
         "shred": shred,
+        "remove_empty": remove_empty,
     }
