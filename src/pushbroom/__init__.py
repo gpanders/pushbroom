@@ -1,3 +1,3 @@
-__version__ = "v0.2.1"
+__version__ = "v0.3.0"
 
 from .sweep import sweep
