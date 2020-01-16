@@ -3,7 +3,7 @@ import os
 import re
 import time
 from pathlib import Path
-from typing import Optional
+from typing import Dict
 
 SECONDS_PER_DAY = 24 * 60 * 60
 
@@ -22,52 +22,47 @@ def delete(path: Path, shred: bool) -> None:
     Path(path).unlink()
 
 
-def sweep(
-    name: str,
-    path: Path,
-    num_days: int,
-    ignore: re.Pattern,
-    match: re.Pattern,
-    trash: Optional[Path],
-    dry_run: bool,
-    shred: bool,
-) -> None:
+def sweep(name: str, path: Path, opts: Dict, dry_run: bool) -> None:
     # pylint: disable = too-many-arguments
     """Remove old files from a directory
 
-    :name:     Name of the section being cleaned
-    :path:     Path to remove files from
-    :num_days: Remove files older than this many days
-    :ignore:   Regular expression pattern of paths to ignore
-    :match:    Regular expression pattern of paths to remove
-    :trash:    If set, move files to this directory instead of deleting them
-    :dry_run:  Only show what would happen without actually doing anything
-    :shred:    Securely delete file data before removing
+    :name:    Name of the section being cleaned
+    :path:    Path to remove files from
+    :opts:    Dict of options containing the following:
+
+                num_days - Remove files older than this many days
+                ignore   - Regular expression pattern of paths to ignore
+                match    - Regular expression pattern of paths to remove
+                trash    - If set, move files to this directory instead of deleting them
+                shred    - Securely delete file data before removing
+
+    :dry_run: Only show what would happen without actually doing anything
 
     """
     logging.info("Sweeping %s", name)
-    num_seconds = num_days * SECONDS_PER_DAY
+    num_seconds = opts["num_days"] * SECONDS_PER_DAY
     thresh = time.time() - num_seconds
+    match, ignore = opts["match"], opts["ignore"]
     for root, dirs, files in os.walk(path):
         dirs[:] = [d for d in dirs if re.match(match, d) and not re.match(ignore, d)]
         files = [f for f in files if re.match(match, f) and not re.match(ignore, f)]
-        for file in files:
-            fpath = Path(root).joinpath(file)
+        for fil in files:
+            fpath = Path(root).joinpath(fil)
             if not fpath.exists():
                 continue
 
             if fpath.stat().st_mtime >= thresh:
                 continue
 
-            if trash:
-                logging.info("Moving %s to %s", fpath, trash)
+            if opts["trash"]:
+                logging.info("Moving %s to %s", fpath, opts["trash"])
                 if not dry_run:
-                    fpath.rename(Path(trash).joinpath(fpath.name))
+                    fpath.rename(Path(opts["trash"]).joinpath(fpath.name))
             else:
-                if shred:
+                if opts["shred"]:
                     logging.info("Securely deleting %s", fpath)
                 else:
                     logging.info("Deleting %s", fpath)
 
                 if not dry_run:
-                    delete(fpath, shred)
+                    delete(fpath, opts["shred"])

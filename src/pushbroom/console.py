@@ -9,6 +9,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from typing import Dict
 
 from pushbroom import __version__, sweep
 
@@ -30,28 +31,8 @@ def pushbroom(config: configparser.ConfigParser, dry_run: bool = False) -> None:
         if not fullpath.is_dir():
             logging.error("No such directory: %s", fullpath)
         else:
-            num_days = config.getint(section, "numdays")
-            trash_dir = config.get(section, "trash", fallback=None)
-            ignore = config.get(section, "ignore", fallback="").split(",")
-            ignore_re = re.compile("|".join([fnmatch.translate(x) for x in ignore]))
-            match = config.get(section, "match", fallback="*").split(",")
-            match_re = re.compile("|".join([fnmatch.translate(x) for x in match]))
-            shred = config.getboolean(section, "shred", fallback=False)
-
-            trash = None
-            if trash_dir:
-                if shred:
-                    logging.warning("Ignoring 'Shred' option while 'Trash' is set")
-                    shred = False
-
-                trash = Path(trash_dir).expanduser().absolute()
-                if not trash.is_dir():
-                    logging.warning("Creating directory %s", trash)
-                    trash.mkdir(parents=True)
-
-            sweep(
-                section, fullpath, num_days, ignore_re, match_re, trash, dry_run, shred
-            )
+            opts = parse_opts(config, section)
+            sweep(section, fullpath, opts, dry_run)
 
 
 def parse_args() -> argparse.Namespace:
@@ -125,3 +106,32 @@ def read_config(conf_file: Path = None) -> configparser.ConfigParser:
         sys.exit(1)
 
     return config
+
+
+def parse_opts(config: configparser.ConfigParser, section: str) -> Dict:
+    num_days = config.getint(section, "numdays")
+    trash_dir = config.get(section, "trash", fallback=None)
+    ignore = config.get(section, "ignore", fallback="").split(",")
+    ignore_re = re.compile("|".join([fnmatch.translate(x) for x in ignore]))
+    match = config.get(section, "match", fallback="*").split(",")
+    match_re = re.compile("|".join([fnmatch.translate(x) for x in match]))
+    shred = config.getboolean(section, "shred", fallback=False)
+
+    trash = None
+    if trash_dir:
+        if shred:
+            logging.warning("Ignoring 'Shred' option while 'Trash' is set")
+            shred = False
+
+        trash = Path(trash_dir).expanduser().absolute()
+        if not trash.is_dir():
+            logging.warning("Creating directory %s", trash)
+            trash.mkdir(parents=True)
+
+    return {
+        "num_days": num_days,
+        "ignore": ignore_re,
+        "match": match_re,
+        "trash": trash,
+        "shred": shred,
+    }
