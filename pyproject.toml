@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pushbroom"
-version = "0.3.0"
+version = "0.3.1"
 description = "Clean up your filesystem"
 authors = ["Greg Anders <greg@gpanders.com>"]
 license = "MIT"

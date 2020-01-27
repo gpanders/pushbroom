@@ -88,18 +88,18 @@ def setup_logging(args: argparse.Namespace) -> None:
 def read_config(conf_file: Path = None) -> configparser.ConfigParser:
     """Find and read configuration file"""
     if not conf_file:
-        # Look under XDG_CONFIG_HOME first, then look for ~/.pushbroomrc
+        # Look under XDG_CONFIG_HOME first, then for /etc/pushbroom/pushbroom.conf
         conf_file = (
             Path(os.environ.get("XDG_CONFIG_HOME", Path("~/.config").expanduser()))
             .joinpath("pushbroom")
             .joinpath("config")
         )
         if not conf_file.exists():
-            conf_file = Path("~/.pushbroomrc").expanduser()
+            conf_file = Path("/etc/pushbroom/pushbroom.conf")
 
     config = configparser.ConfigParser()
     try:
-        with open(conf_file, "r") as fil:
+        with conf_file.open() as fil:
             config.read_file(fil)
     except FileNotFoundError:
         logging.error("Configuration file %s not found", conf_file)

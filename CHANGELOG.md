@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.0] - 2019-01-16
+## [0.3.1] - 2020-01-27
+### Changes
+- Use `Path.open()` instead of `open(Path)`, as the latter does not work in
+  Python 3.5 (but does in 3.6 and on)
+- Look for configuration in `/etc/pushbroom/pushbroom.conf` if not found in
+  `$XDG_CONFIG_HOME`
+
+## [0.3.0] - 2020-01-16
 ### Added
 - Empty subdirectories are automatically removed from monitored directories.
   This can be changed with the new `RemoveEmpty` option.
@@ -57,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2019-06-18
 - Initial Python release
 
-[Unreleased]: https://github.com/gpanders/pushbroom/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/gpanders/pushbroom/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/gpanders/pushbroom/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/gpanders/pushbroom/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/gpanders/pushbroom/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/gpanders/pushbroom/compare/v0.1.5...v0.2.0
