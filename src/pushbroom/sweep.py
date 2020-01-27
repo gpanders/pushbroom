@@ -14,7 +14,7 @@ def delete(path: Path, shred: bool) -> None:
     If ``shred`` is True, first write over the file with random data before deleting.
     """
     if shred:
-        with open(path, "ba+") as fil:
+        with path.open("ba+") as fil:
             length = fil.tell()
             fil.seek(0)
             fil.write(os.urandom(length))
@@ -45,7 +45,7 @@ def sweep(name: str, path: Path, opts: Dict, dry_run: bool) -> None:
     num_seconds = opts["num_days"] * SECONDS_PER_DAY
     thresh = time.time() - num_seconds
     match, ignore = opts["match"], opts["ignore"]
-    for root, dirs, files in os.walk(path):
+    for root, dirs, files in os.walk(str(path)):
         if opts["remove_empty"] and not dirs and not files:
             Path(root).rmdir()
             continue

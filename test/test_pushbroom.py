@@ -15,7 +15,7 @@ from pushbroom import console
 TRASH_DIR = Path("~/.cache/pushbroom/trash").expanduser()
 
 
-def get_config(name):
+def get_config(name: str):
     """
     Read the given configuration file and return the configuration object
     """
@@ -31,7 +31,7 @@ def get_config_path(config):
     return Path(config.get(section, "path")).expanduser().absolute()
 
 
-def make_test_file(path, name=None):
+def make_test_file(path: Path, name: str = None):
     """
     Create a file with the given ``name`` under the given ``path``. Set the file's
     mtime to two days ago.
@@ -43,7 +43,7 @@ def make_test_file(path, name=None):
     test_file = path.joinpath(name)
     test_file.touch()
     mtime = (datetime.today() - timedelta(2)).timestamp()
-    os.utime(test_file, (mtime, mtime))
+    os.utime(str(test_file), (mtime, mtime))
     return test_file
 
 
@@ -55,7 +55,7 @@ def trash_dir():
     """
     TRASH_DIR.mkdir(parents=True, exist_ok=True)
     yield TRASH_DIR
-    shutil.rmtree(TRASH_DIR)
+    shutil.rmtree(str(TRASH_DIR))
 
 
 def test_tilde_home(monkeypatch):
@@ -158,7 +158,7 @@ def test_match_with_ignore():
     path.rmdir()
 
 
-def test_trash(trash_dir):
+def test_trash(trash_dir: Path):
     """
     File should be moved to the Trash dir and not deleted
     """
@@ -173,7 +173,7 @@ def test_trash(trash_dir):
     path.rmdir()
 
 
-def test_shred_with_trash(trash_dir):
+def test_shred_with_trash(trash_dir: Path):
     """
     When both Shred and Trash are specified, Shred should be ignored
     """
@@ -182,17 +182,17 @@ def test_shred_with_trash(trash_dir):
     test_file = make_test_file(path, "shred_and_trash.txt")
 
     mtime = test_file.stat().st_mtime
-    with open(test_file, "w", encoding="utf8") as fil:
+    with test_file.open("w", encoding="utf8") as fil:
         fil.write("Hello, world!")
 
     # Force mtime back to what it was
-    os.utime(test_file, (mtime, mtime))
+    os.utime(str(test_file), (mtime, mtime))
 
     console.pushbroom(config)
     assert not test_file.exists()
     assert trash_dir.joinpath(test_file.name).exists()
 
-    with open(trash_dir.joinpath(test_file.name), "r", encoding="utf8") as fil:
+    with trash_dir.joinpath(test_file.name).open(encoding="utf8") as fil:
         assert "Hello, world!" in fil.readlines()
 
     path.rmdir()
