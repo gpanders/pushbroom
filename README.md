@@ -171,6 +171,14 @@ to `~/.local/share/systemd/` and enable the service with
 Note that you may need to change the path to the `pushbroom` script in the
 service file depending on your method of installation.
 
+## Contributing
+
+Please feel free to contribute changes or bug fixes! You can [send patches][]
+to <git@gpanders.com> or submit a pull request on [Github][].
+
+[send patches]: https://git-send-email.io/
+[Github]: https://github.com/gpanders/pushbroom
+
 ## Similar Work
 
 - [Belvedere](https://github.com/mshorts/belvedere): An automated file manager
