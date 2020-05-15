@@ -3,8 +3,8 @@
 Pushbroom is a tool designed to help keep your filesystem clear of clutter.
 Certain directories, such as your downloads directory, tend to accumulate a
 large amount of old files that take up space. Over time, this clutter can
-accumulate to a significant amount of storage space. Pushbroom gives you an easy
-way to remove these old files.
+accumulate to a significant amount of storage space. Pushbroom gives you an
+easy way to remove these old files.
 
 Pushbroom is written in Python and should therefore work on any platform that
 can run Python. For now, it is only officially supported for macOS and Linux.
@@ -26,26 +26,28 @@ gpanders/tap/pushbroom` to start the automatic launchd daemon:
 
 Pushbroom will run once every hour.
 
-### pipx
+### pip
 
-Install using [pipx](https://pipxproject.github.io/pipx/):
+Install using pip:
 
-    pipx install pushbroom
+    pip install --user pushbroom
 
-Copy the [example configuration
-file](https://raw.githubusercontent.com/gpanders/pushbroom/master/pushbroom.conf)
-to `~/.config/pushbroom/config` or create your own from scratch.
+You must also copy the [example configuration file][] to
+`~/.config/pushbroom/config` or create your own from scratch.
+
+[example configuration file]: ./pushbroom.conf
 
 ### From source
 
-Check the [releases](https://github.com/gpanders/pushbroom/releases) page for
-the latest release. Extract the archive and copy the files to their correct
-locations:
+Check the [releases][] page for the latest release. Download and extract the
+archive, then install with pip:
 
     tar xzf pushbroom-vX.Y.Z.tar.gz
     cd pushbroom-vX.Y.Z
-    cp bin/pushbroom /usr/local/bin/pushbroom
+    pip install --user .
     cp pushbroom.conf ~/.config/pushbroom/config
+
+[releases]: https://git.sr.ht/~gpanders/pushbroom/refs
 
 ## Usage
 
@@ -153,7 +155,8 @@ Remove empty subdirectories from monitored paths.
 
 ## Automating
 
-If installed via Homebrew then Pushbroom can be set to run once every hour using
+If installed via Homebrew then Pushbroom can be set to run once every hour
+using
 
     brew services start gpanders/tap/pushbroom
 
@@ -162,22 +165,16 @@ Another option is to install a crontab entry
     0 */1 * * * /usr/local/bin/pushbroom
 
 If you are using a Linux distribution that uses systemd, you can copy the
-[systemd service
-file](https://github.com/gpanders/pushbroom/blob/master/contrib/systemd/pushbroom.service)
-to `~/.local/share/systemd/` and enable the service with
+[systemd service][] and [timer][] files to `~/.local/share/systemd/` and enable
+the service with
 
     systemctl --user enable --now pushbroom
 
 Note that you may need to change the path to the `pushbroom` script in the
 service file depending on your method of installation.
 
-## Contributing
-
-Please feel free to contribute changes or bug fixes! You can [send patches][]
-to <git@gpanders.com> or submit a pull request on [Github][].
-
-[send patches]: https://git-send-email.io/
-[Github]: https://github.com/gpanders/pushbroom
+[systemd service]: ./contrib/systemd/pushbroom.service
+[timer]: ./contrib/systemd/pushbroom.timer
 
 ## Similar Work
 
