@@ -112,9 +112,12 @@ Both `Ignore` and `Match` can be a list of patterns separated by commas.
 Note that `.*` **is not** a regular expression for "match everything", but
 rather a _glob expression_ for "all files that start with a period".
 
+---
+
 The following configuration items are recognized in `pushbroom.conf`:
 
 ### Path
+
 **Required**
 
 Absolute path to a directory to monitor. Tildes (`~`) are expanded to the
@@ -126,22 +129,26 @@ Specify where to move files after deletion. If omitted, files will simply be
 deleted.
 
 ### NumDays
+
 **Required**
 
 Number of days to keep files in `Path` before they are removed.
 
 ### Ignore
+
 **Default**: None
 
 List of glob expression patterns of files or directories to ignore.
 
 ### Match
+
 **Default**: `*`
 
 List of glob expression patterns of files or directories to remove. If omitted,
 everything is removed.
 
 ### Shred
+
 **Default**: False
 
 Securely delete files before removing them. Note that this option is mutually
@@ -149,6 +156,7 @@ exclusive with the [`Trash`](#trash) option, with `Trash` taking precedence if
 both options are used.
 
 ### RemoveEmpty
+
 **Default**: True
 
 Remove empty subdirectories from monitored paths.
@@ -175,6 +183,16 @@ service file depending on your method of installation.
 
 [systemd service]: ./contrib/systemd/pushbroom.service
 [timer]: ./contrib/systemd/pushbroom.timer
+
+## Contributing
+
+[Send patches][] and questions to [~gpanders/pushbroom@lists.sr.ht][].
+
+Report a bug or open a ticket at [todo.sr.ht/~gpanders/pushbroom][].
+
+[Send patches]: https://git-send-email.io
+[~gpanders/pushbroom@lists.sr.ht]: https://lists.sr.ht/~gpanders/pushbroom
+[todo.sr.ht/~gpanders/pushbroom]: https://todo.sr.ht/~gpanders/pushbroom
 
 ## Similar Work
 
