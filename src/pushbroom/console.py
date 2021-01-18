@@ -65,7 +65,7 @@ def setup_logging(args: argparse.Namespace) -> None:
     stream_handler.setLevel(logging.ERROR)
 
     if not args.dry_run:
-        # If not doing a dry run log, to a file
+        # If not doing a dry run, log to a file
         log_file = (
             Path(os.environ.get("XDG_CACHE_HOME", Path("~/.cache").expanduser()))
             .joinpath("pushbroom")
