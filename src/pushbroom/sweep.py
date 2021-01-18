@@ -11,7 +11,12 @@ SECONDS_PER_DAY = 24 * 60 * 60
 def delete(path: Path, shred: bool) -> None:
     """Delete the file at the given path.
 
-    If ``shred`` is True, first write over the file with random data before deleting.
+    Parameters
+    ----------
+    path : Path
+        Path to the file to be deleted
+    shred : bool
+        If True, first write over the file with random data before deleting
     """
     if shred:
         with path.open("ba+") as fil:
@@ -23,23 +28,27 @@ def delete(path: Path, shred: bool) -> None:
 
 
 def sweep(name: str, path: Path, opts: Dict, dry_run: bool) -> None:
-    # pylint: disable = too-many-arguments
     """Remove old files from a directory
 
-    :name:    Name of the section being cleaned
-    :path:    Path to remove files from
-    :opts:    Dict of options containing the following:
+    Parameters
+    ----------
+    name : str
+        Name of the section being cleaned
+    path : Path
+        Path to remove files from
+    opts : dict
+        Dict of options containing the following:
 
-                num_days     - Remove files older than this many days
-                ignore       - Regular expression pattern of paths to ignore
-                match        - Regular expression pattern of paths to remove
-                trash        - If set, move files to this directory instead of deleting
-                               them
-                shred        - Securely delete file data before removing
-                remove_empty - Remove empty subdirectories
+            num_days     - Remove files older than this many days
+            ignore       - Regular expression pattern of paths to ignore
+            match        - Regular expression pattern of paths to remove
+            trash        - If set, move files to this directory instead of deleting
+                           them
+            shred        - Securely delete file data before removing
+            remove_empty - Remove empty subdirectories
 
-    :dry_run: Only show what would happen without actually doing anything
-
+    dry_run : bool
+        If True, only show what would happen without actually doing anything
     """
     logging.info("Sweeping %s", name)
     num_seconds = opts["num_days"] * SECONDS_PER_DAY
