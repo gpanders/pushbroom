@@ -43,7 +43,7 @@ def make_test_file(path: Path, name: str = None):
     test_file = path.joinpath(name)
     test_file.touch()
     mtime = (datetime.today() - timedelta(2)).timestamp()
-    os.utime(str(test_file), (mtime, mtime))
+    os.utime(test_file, (mtime, mtime))
     return test_file
 
 
@@ -55,7 +55,7 @@ def trash_dir():
     """
     TRASH_DIR.mkdir(parents=True, exist_ok=True)
     yield TRASH_DIR
-    shutil.rmtree(str(TRASH_DIR))
+    shutil.rmtree(TRASH_DIR)
 
 
 def test_tilde_home(monkeypatch):
@@ -186,7 +186,7 @@ def test_shred_with_trash(trash_dir: Path):
         fil.write("Hello, world!")
 
     # Force mtime back to what it was
-    os.utime(str(test_file), (mtime, mtime))
+    os.utime(test_file, (mtime, mtime))
 
     console.pushbroom(config)
     assert not test_file.exists()

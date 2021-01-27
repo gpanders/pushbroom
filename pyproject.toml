@@ -12,11 +12,10 @@ include = ["CHANGELOG.md", "pushbroom.conf"]
 pushbroom = "pushbroom.console:run"
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"
-mypy = "^0.761.0"
 
 [build-system]
 requires = ["poetry>=0.12"]

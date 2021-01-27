@@ -72,7 +72,7 @@ def setup_logging(args: argparse.Namespace) -> None:
             .joinpath("pushbroom.log")
         )
         log_file.parent.mkdir(parents=True, exist_ok=True)
-        file_handler = logging.FileHandler(str(log_file))
+        file_handler = logging.FileHandler(log_file)
         fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
         file_handler.setFormatter(fmt)
         file_handler.setLevel(logging.INFO)

@@ -54,7 +54,7 @@ def sweep(name: str, path: Path, opts: Dict, dry_run: bool) -> None:
     num_seconds = opts["num_days"] * SECONDS_PER_DAY
     thresh = time.time() - num_seconds
     match, ignore = opts["match"], opts["ignore"]
-    for root, dirs, files in os.walk(str(path)):
+    for root, dirs, files in os.walk(path):
         if opts["remove_empty"] and not dirs and not files:
             Path(root).rmdir()
             continue
