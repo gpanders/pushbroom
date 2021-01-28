@@ -1,0 +1,51 @@
+image: debian/stable
+packages:
+    - git
+    - curl
+    - python3
+    - python3-distutils
+secrets:
+    - 78f39fb6-1185-492f-9c21-f755e10b5e5d
+    - 4039c3d1-35f1-4378-b015-8a9c98b4a0cf
+    - 555df4e1-b3c6-49dc-bd4e-b02f8ed0fff3
+environment:
+    GIT_SSH_COMMAND: ssh -o StrictHostKeyChecking=no
+triggers:
+    - action: email
+      condition: failure
+      to: Gregory Anders <greg@gpanders.com>
+tasks:
+    - setup: |
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+    - mirror: |
+        cd pushbroom
+        git push --force --mirror git@github.com:gpanders/pushbroom
+    - test: |
+        cd pushbroom
+        . $HOME/.poetry/env
+        poetry install
+        poetry run pytest
+    - publish: |
+        cd pushbroom
+        tag=$(git describe --exact-match 2>/dev/null || true)
+        if [ -z "$tag" ]; then
+            echo "Current commit is not a tag; not building anything"
+        else
+            . $HOME/.poetry/env
+            version=$(echo "$tag" | tr -d 'v')
+            curdir=$(pwd)
+            tmpdir=$(mktemp -d)
+
+            git worktree add "$tmpdir" "$tag"
+            cd "$tmpdir"
+
+            poetry build
+
+            # Upload to PyPI
+            . ~/.pypi-credentials
+            poetry publish -u "$PYPI_USERNAME" -p "$PYPI_PASSWORD"
+
+            # Upload to sourcehut
+            export SRHT_TOKEN=$(cat ~/.srht-token)
+            curl -H Authorization:"token $SRHT_TOKEN" -F file=@dist/pushbroom-"$version"-py3-none-any.whl https://git.sr.ht/api/repos/pushbroom/artifacts/"$tag"
+        fi
