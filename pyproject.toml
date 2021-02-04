@@ -5,7 +5,7 @@ description = "Clean up your filesystem"
 authors = ["Gregory Anders <greg@gpanders.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/gpanders/pushbroom"
+homepage = "https://sr.ht/~gpanders/pushbroom"
 include = ["CHANGELOG.md", "pushbroom.conf"]
 
 [tool.poetry.scripts]
