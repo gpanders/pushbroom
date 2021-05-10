@@ -163,15 +163,6 @@ Remove empty subdirectories from monitored paths.
 
 ## Automating
 
-If installed via Homebrew then Pushbroom can be set to run once every hour
-using
-
-    brew services start gpanders/tap/pushbroom
-
-Another option is to install a crontab entry
-
-    0 */1 * * * /usr/local/bin/pushbroom
-
 If you are using a Linux distribution that uses systemd, you can copy the
 [systemd service][] and [timer][] files to `~/.local/share/systemd/` and enable
 the service with
@@ -180,6 +171,10 @@ the service with
 
 Note that you may need to change the path to the `pushbroom` script in the
 service file depending on your method of installation.
+
+Another option is to install a crontab entry
+
+    0 */1 * * * /usr/local/bin/pushbroom
 
 [systemd service]: ./contrib/systemd/pushbroom.service
 [timer]: ./contrib/systemd/pushbroom.timer
