@@ -11,21 +11,6 @@ can run Python. For now, it is only officially supported for macOS and Linux.
 
 ## Installation
 
-### Homebrew (macOS only)
-
-Install via Homebrew:
-
-    brew install gpanders/tap/pushbroom
-
-Copy and modify the included `pushbroom.conf` file to
-`~/.config/pushbroom/config` and use `brew services start
-gpanders/tap/pushbroom` to start the automatic launchd daemon:
-
-    cp /usr/local/etc/pushbroom.conf ~/.config/pushbroom/config
-    brew services start gpanders/tap/pushbroom
-
-Pushbroom will run once every hour.
-
 ### pip
 
 Install using pip:
