@@ -1,12 +1,12 @@
-# Pushbroom
+# pushbroom
 
-Pushbroom is a tool designed to help keep your filesystem clear of clutter.
+`pushbroom` is a tool designed to help keep your filesystem clear of clutter.
 Certain directories, such as your downloads directory, tend to accumulate a
 large amount of old files that take up space. Over time, this clutter can
-accumulate to a significant amount of storage space. Pushbroom gives you an
+accumulate to a significant amount of storage space. `pushbroom` gives you an
 easy way to remove these old files.
 
-Pushbroom is written in Python and should therefore work on any platform that
+`pushbroom` is written in Python and should therefore work on any platform that
 can run Python. For now, it is only officially supported for macOS and Linux.
 
 ## Installation
@@ -36,7 +36,7 @@ archive, then install with pip:
 
 ## Usage
 
-Pushbroom can be run from the command line using:
+`pushbroom` can be run from the command line using:
 
     pushbroom
 
@@ -44,7 +44,7 @@ Use `pushbroom --help` to see a list of command line options.
 
 ## Configuration
 
-The Pushbroom configuration file is organized into sections where each section
+The `pushbroom` configuration file is organized into sections where each section
 represents a directory path to monitor. The default configuration file looks
 like this:
 
@@ -53,7 +53,7 @@ like this:
     Trash = ~/.Trash
     NumDays = 30
 
-This means that, by default, Pushbroom will monitor your ~/Downloads folder and
+This means that, by default, `pushbroom` will monitor your ~/Downloads folder and
 move any file or folder older than 30 days into your ~/.Trash directory.
 
 If you don't want to move files into ~/.Trash but instead want to just delete
@@ -70,7 +70,7 @@ be anything you want:
     Path = ~
     NumDays = 90
 
-You can also specify an `Ignore` parameter to instruct Pushbroom to ignore any
+You can also specify an `Ignore` parameter to instruct `pushbroom` to ignore any
 files or directories that match the given glob:
 
     [Downloads]
@@ -78,7 +78,7 @@ files or directories that match the given glob:
     NumDays = 30
     Ignore = folder_to_keep
 
-Similarly, you can specify `Match` to have Pushbroom only remove files that
+Similarly, you can specify `Match` to have `pushbroom` only remove files that
 match one of the given patterns:
 
     [Vim Backup Directory]
