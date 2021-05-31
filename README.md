@@ -11,6 +11,14 @@ can run Python. For now, it is only officially supported for macOS and Linux.
 
 ## Installation
 
+### Package Manager
+
+The following package managers support `pushbroom`:
+
+#### MacPorts
+
+    sudo port install pushbroom
+
 ### pip
 
 Install using pip:
